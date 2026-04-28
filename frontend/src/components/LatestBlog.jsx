@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function LatestBlog() {
-  const { blogData } = useContext(StoreContext);
+  const { blogData = [] } = useContext(StoreContext);
   const navigate = useNavigate();
   return (
     <div className="px-4 sm:px-6 lg:px-10 py-10" onClick={() => navigate("")}>
@@ -20,8 +20,8 @@ export default function LatestBlog() {
           .reverse()
           .map((blog, indx) => (
             <div
-              key={blog.id || indx}
-              className="bg-white rounded-2xl shadow-md hover:shadow-xl transition overflow-hidden border p-2"
+              key={blog._id || indx}
+              className="bg-white rounded-2xl shadow-md hover:shadow-xl transition overflow-hidden border"
             >
               <BlogCart blog={blog} />
             </div>

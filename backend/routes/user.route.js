@@ -13,9 +13,7 @@ import { isAuthenticated } from "../middlewares/isAuthenitcated.js";
 import { userSchema, validateUser } from "../validators/user.validator.js";
 import { singleUpload } from "../middlewares/multer.js";
 
-router
-  .route("/register")
-  .post(singleUpload, validateUser(userSchema), registerUser);
+router.route("/register").post(singleUpload, validateUser(userSchema), registerUser);
 router.route("/verify").post(verifyEmailToken);
 router.route("/login").post(loginUser);
 router.route("/logout").post(isAuthenticated, logoutUser);

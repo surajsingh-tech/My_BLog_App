@@ -3,6 +3,8 @@ import User from "../models/user.model.js";
 
 export const isAuthenticated = async (req, res, next) => {
   try {
+    console.log("111");
+    
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({
@@ -20,8 +22,7 @@ export const isAuthenticated = async (req, res, next) => {
       if (err.name === "TokenExpiredError") {
         return res.status(401).json({
           success: false,
-          message:
-            "Access token has expired, use refresh token to generate again",
+          message: "Access token expired",
         });
       }
       return res.status(401).json({

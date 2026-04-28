@@ -26,14 +26,15 @@ export default function Blog() {
 
         {/* Blog Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {blogData?.map((blog, indx) => (
-            <div
-              key={blog.id || indx}
-              className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition duration-300 overflow-hidden border border-gray-100"
-            >
-              <BlogCart blog={blog} />
-            </div>
-          ))}
+          {blogData?.length > 0 &&
+            blogData.map((blog, indx) => (
+              <div
+                key={blog._id || indx}
+                className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition duration-300 overflow-hidden border border-gray-100"
+              >
+                <BlogCart blog={blog} />
+              </div>
+            ))}
         </div>
       </div>
     </div>

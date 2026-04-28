@@ -24,7 +24,7 @@ const schema = yup.object().shape({
 });
 
 export default function Login() {
-  const { setUser } = useContext(StoreContext);
+  const { login } = useContext(StoreContext);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -72,10 +72,9 @@ export default function Login() {
       );
 
       if (res.data.success) {
+        toast.success("Welcome back to your Blog App 🎉");
+        login(res.data);
         navigate("/");
-        setUser(res.data.user);
-        localStorage.setItem("accessToken", res.data?.accessToken);
-        toast.success("Welcome back to your Blog Dashboard 🚀");
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Login failed");
@@ -91,104 +90,105 @@ export default function Login() {
         <div className="text-center mb-8">
           <h2 className="text-4xl font-bold text-gray-800">Welcome Back ✍️</h2>
           <p className="text-gray-500 mt-2">
-            Sign in to continue reading, writing & managing your blogs
+            login to continue reading, writing & managing your blogs
           </p>
         </div>
 
         {/* Card */}
-        <Card className="shadow-xl rounded-2xl border-none">
-          <CardHeader className="space-y-2">
-            <CardTitle className="text-2xl text-center">
-              Login to My Blog
-            </CardTitle>
-            <CardDescription className="text-center text-gray-500">
-              Access your dashboard, drafts & published stories
-            </CardDescription>
-          </CardHeader>
+        <form onSubmit={setPostData}>
+          <Card className="shadow-xl rounded-2xl border-none">
+            <CardHeader className="space-y-2">
+              <CardTitle className="text-2xl text-center">
+                Login to My Blog
+              </CardTitle>
+              <CardDescription className="text-center text-gray-500">
+                Access your dashboard, drafts & published stories
+              </CardDescription>
+            </CardHeader>
 
-          <CardContent>
-            <div className="flex flex-col gap-6">
-              {/* Email */}
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  onChange={getInputData}
-                  value={formData.email}
-                  id="email"
-                  type="email"
-                  placeholder="example@gmail.com"
-                  name="email"
-                  className={`${errors.email ? "border-red-500 focus-visible:ring-red-500" : ""}`}
-                />
-                {errors.email && (
-                  <p className="text-red-500 text-sm">{errors.email}</p>
-                )}
-              </div>
-
-              {/* Password */}
-              <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <Link
-                    to="/forgot-password"
-                    className="ml-auto text-sm text-indigo-500 hover:underline"
-                  >
-                    Forgot password?
-                  </Link>
-                </div>
-
-                <div className="relative">
+            <CardContent>
+              <div className="flex flex-col gap-6">
+                {/* Email */}
+                <div className="grid gap-2">
+                  <Label htmlFor="email">Email</Label>
                   <Input
                     onChange={getInputData}
-                    value={formData.password}
-                    id="password"
-                    placeholder="Enter your password"
-                    type={showPassword ? "text" : "password"}
-                    name="password"
-                    className={`${errors.password ? "border-red-500 focus-visible:ring-red-500" : ""}`}
+                    value={formData.email}
+                    id="email"
+                    type="email"
+                    placeholder="example@gmail.com"
+                    name="email"
+                    className={`${errors.email ? "border-red-500 focus-visible:ring-red-500" : ""}`}
                   />
-
-                  <Button
-                    size="sm"
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    disabled={isLoading}
-                    variant="ghost"
-                    className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="w-4 h-4 text-gray-500" />
-                    ) : (
-                      <Eye className="w-4 h-4 text-gray-500" />
-                    )}
-                  </Button>
+                  {errors.email && (
+                    <p className="text-red-500 text-sm">{errors.email}</p>
+                  )}
                 </div>
 
-                {errors.password && (
-                  <p className="text-red-500 text-sm">{errors.password}</p>
-                )}
-              </div>
-            </div>
-          </CardContent>
+                {/* Password */}
+                <div className="grid gap-2">
+                  <div className="flex items-center">
+                    <Label htmlFor="password">Password</Label>
+                    <Link
+                      to="/forgot-password"
+                      className="ml-auto text-sm text-indigo-500 hover:underline"
+                    >
+                      Forgot password?
+                    </Link>
+                  </div>
 
-          <CardFooter className="flex-col gap-3">
-            <Button
-              type="button"
-              disabled={isLoading}
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
-              onClick={setPostData}
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Signing you in...
-                </>
-              ) : (
-                "Login to Dashboard"
-              )}
-            </Button>
-          </CardFooter>
-        </Card>
+                  <div className="relative">
+                    <Input
+                      onChange={getInputData}
+                      value={formData.password}
+                      id="password"
+                      placeholder="Enter your password"
+                      type={showPassword ? "text" : "password"}
+                      name="password"
+                      className={`${errors.password ? "border-red-500 focus-visible:ring-red-500" : ""}`}
+                    />
+
+                    <Button
+                      size="sm"
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      disabled={isLoading}
+                      variant="ghost"
+                      className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+                    >
+                      {showPassword ? (
+                        <EyeOff className="w-4 h-4 text-gray-500" />
+                      ) : (
+                        <Eye className="w-4 h-4 text-gray-500" />
+                      )}
+                    </Button>
+                  </div>
+
+                  {errors.password && (
+                    <p className="text-red-500 text-sm">{errors.password}</p>
+                  )}
+                </div>
+              </div>
+            </CardContent>
+
+            <CardFooter className="flex-col gap-3">
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    login...
+                  </>
+                ) : (
+                  "Login "
+                )}
+              </Button>
+            </CardFooter>
+          </Card>
+        </form>
 
         {/* Footer */}
         <p className="mt-6 text-center text-sm text-gray-600">

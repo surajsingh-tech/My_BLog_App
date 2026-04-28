@@ -1,6 +1,9 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 
 export default function VerifyEmail() {
+  const location = useLocation();
+  const email = location.state.email;
   return (
     <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-indigo-50 via-white to-pink-50">
       <div className="w-full max-w-md sm:max-w-lg">
@@ -13,7 +16,7 @@ export default function VerifyEmail() {
 
           {/* Description */}
           <p className="text-gray-500 mt-3 text-sm sm:text-base">
-            We’ve sent a verification link to your email.
+            We’ve sent a verification link to your email {email} .
             <br />
             Please open your inbox and confirm your account.
           </p>

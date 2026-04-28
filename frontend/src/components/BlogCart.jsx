@@ -1,44 +1,46 @@
 import React from "react";
+import { Card, CardContent } from "./ui/card";
+import { useNavigate } from "react-router-dom";
 
 export default function BlogCart({ blog }) {
+  const navigate = useNavigate();
+
   return (
-    <div>
-      {/* Image */}
-      <img
-        src={blog?.image}
-        alt={blog?.title}
-        className="h-48 w-full object-cover"
-      />
-
-      {/* Content */}
-      <div className="p-4 space-y-3">
-        {/* Category */}
-        <span className="text-xs font-semibold px-3 py-1 mb-5 bg-blue-100 text-blue-600 rounded-full">
-          {blog?.category}
-        </span>
-
+    <Card
+      onClick={() => navigate(`/readblog/${blog._id}`)}
+      className="shadow-md hover:shadow-xl transition duration-300 rounded-xl cursor-pointer relative"
+    >
+      <CardContent className="p-4 sm:p-5">
         {/* Title */}
-        <h2 className="text-lg font-bold leading-snug">{blog?.title}</h2>
+        <h2 className="text-lg sm:text-xl font-semibold">{blog?.title}</h2>
 
-        {/* Description */}
-        <p className="text-sm text-gray-600 line-clamp-3">
-          {blog?.description}
+        {/* Category + Date */}
+        <p className="text-xs sm:text-sm text-muted-foreground">
+          {blog?.category} • {new Date(blog?.createdAt).toLocaleDateString()}
         </p>
 
-        {/* Author + Date */}
-        <div className="flex items-center justify-between pt-3 border-t">
-          <div className="flex items-center gap-2">
-            <img
-              src={blog?.author?.image}
-              alt={blog?.author?.name}
-              className="w-10 h-10 rounded-full object-cover border"
-            />
-            <span className="text-sm font-medium">{blog?.author?.name}</span>
-          </div>
+        {/* Image */}
+        <img
+          src={blog?.image?.url}
+          alt="blog"
+          className="mt-3 rounded-md w-full h-40 sm:h-48 object-cover"
+        />
 
-          <span className="text-xs text-gray-500">{blog?.date}</span>
+        {/* Description */}
+        <p className="mt-3 text-sm line-clamp-2">{blog?.description}</p>
+
+        {/* Author */}
+        <div className="flex items-center gap-2 mt-3">
+          <img
+            src={blog?.author?.profile?.url}
+            alt="author"
+            className="w-6 h-6 rounded-full"
+          />
+          <span className="text-xs text-gray-500">
+            {blog?.author?.username}
+          </span>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

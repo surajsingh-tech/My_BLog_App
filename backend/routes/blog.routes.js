@@ -1,16 +1,20 @@
 import express from "express";
-import { isAuthenticated } from "../middlewares/isAuthenitcated";
+import { isAuthenticated } from "../middlewares/isAuthenitcated.js";
 import {
   allBlog,
   createBlog,
   deleteBlog,
-  updatePost,
-} from "../controller/blog.controller";
-const router = express.router();
+  getSingleBlog,
+  updateBlog,
+  userBlogs,
+} from "../controller/blog.controller.js";
+import { singleUpload } from "../middlewares/multer.js";
+const router = express.Router();
 
-router.get("/all-blogs", isAuthenticated, allBlog);
-router.post("/create", isAuthenticated, createBlog);
-router.post("/delete", isAuthenticated, deleteBlog);
-router.post("/update", isAuthenticated, updatePost);
-
+router.get("/all",  allBlog);
+router.post("/create", isAuthenticated, singleUpload, createBlog);
+router.delete("/delete/:blogId", isAuthenticated, deleteBlog);
+router.put("/update/:blogId", isAuthenticated, singleUpload, updateBlog);
+router.get("/singleBlog/:blogId", isAuthenticated, getSingleBlog);
+router.get("/userblogs", isAuthenticated, userBlogs);
 export default router;

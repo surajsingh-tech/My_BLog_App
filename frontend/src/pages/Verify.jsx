@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {  useNavigate, useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, CheckCircle, XCircle } from "lucide-react";
 
@@ -19,7 +19,7 @@ export default function Verify() {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (res.data.success) {
@@ -44,9 +44,7 @@ export default function Verify() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-indigo-50 via-white to-pink-50">
-
       <div className="w-full max-w-md sm:max-w-lg">
-
         {/* Header */}
         <div className="text-center mb-6">
           <h1 className="text-4xl font-bold text-gray-800">
@@ -59,15 +57,11 @@ export default function Verify() {
 
         {/* Card */}
         <Card className="shadow-xl rounded-2xl border-none">
-
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl">
-              Verification Status
-            </CardTitle>
+            <CardTitle className="text-2xl">Verification Status</CardTitle>
           </CardHeader>
 
           <CardContent className="text-center space-y-4">
-
             {/* Loader / Icon */}
             {loading ? (
               <Loader2 className="mx-auto h-10 w-10 animate-spin text-indigo-600" />
@@ -83,8 +77,8 @@ export default function Verify() {
                 status.includes("Successfully")
                   ? "text-green-600"
                   : status.includes("Failed") || status.includes("Invalid")
-                  ? "text-red-500"
-                  : "text-gray-700"
+                    ? "text-red-500"
+                    : "text-gray-700"
               }`}
             >
               {status}
@@ -95,14 +89,11 @@ export default function Verify() {
               {loading
                 ? "Please wait while we verify your email..."
                 : status.includes("Successfully")
-                ? "Redirecting you to login page..."
-                : "Please check your link or try again"}
+                  ? "Redirecting you to login page..."
+                  : "Please check your link or try again"}
             </p>
-
           </CardContent>
-
         </Card>
-
       </div>
     </div>
   );

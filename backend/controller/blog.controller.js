@@ -1,13 +1,16 @@
-import cloudinary from "../config/cloudinary";
-import Blog from "../models/blog.model";
+import cloudinary from "../config/cloudinary.js";
+import Blog from "../models/blog.model.js";
 import getDataUri from "../config/dataUri.js";
 
 export const createBlog = async (req, res) => {
   try {
     const userId = req.userId;
-    const { title, category, discription } = req.body;
+
+    const { title, category, description } = req.body;
+
     const postImage = req.file;
-    if (!title || !category || !discription || !postImage) {
+    console.log(" image ", postImage);
+    if (!title || !category || !description || !postImage) {
       return res.status(500).json({
         success: false,
         message: "All fields are required",
@@ -24,7 +27,7 @@ export const createBlog = async (req, res) => {
     const post = await Blog.create({
       title,
       category,
-      discription,
+      description,
       image: { url: imageUrl, publicId: imagePublicId },
       author: userId,
     });
@@ -37,14 +40,16 @@ export const createBlog = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: "Internal server error",
+      message: `Internal server error ${error.message}`,
     });
   }
 };
 
 export const allBlog = async (req, res) => {
   try {
-    const allBlogs = await Blog.find().sort({ createdAt: -1 });
+    const allBlogs = await Blog.find()
+      .sort({ createdAt: -1 })
+      .populate("author", "username profile");
     return res.status(200).json({
       success: true,
       allBlogs: allBlogs || [],
@@ -106,10 +111,10 @@ export const deleteBlog = async (req, res) => {
   }
 };
 
-export const updatePost = async (req, res) => {
+export const updateBlog = async (req, res) => {
   try {
     const userId = req.userId;
-    const { title, category, discription } = req.body;
+    const { title, category, description } = req.body;
     const { blogId } = req.params;
     if (!blogId) {
       return res.status(400).json({
@@ -121,7 +126,7 @@ export const updatePost = async (req, res) => {
     const blog = await Blog.findOne({
       _id: blogId,
       author: userId,
-    });
+    }).populate("author", "username profile");
 
     if (!blog) {
       return res.status(404).json({
@@ -164,13 +169,64 @@ export const updatePost = async (req, res) => {
 
     if (title) blog.title = title;
     if (category) blog.category = category;
-    if (discription) blog.discription = discription;
+    if (description) blog.description = description;
 
     await blog.save();
     return res.status(200).json({
       success: true,
       message: "Blog updated successfully",
       blog,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
+export const userBlogs = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const userBlogs = await Blog.find({ author: userId })
+      .sort({
+        createdAt: -1,
+      })
+      .populate("author", "username profile");
+
+    return res.status(200).json({
+      success: true,
+      userblog: userBlogs || [],
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
+export const getSingleBlog = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const { blogId } = req.params;
+    if (!blogId) {
+      return res.status(400).json({
+        success: false,
+        message: "blogId is require",
+      });
+    }
+    const userBlogs = await Blog.find({ _id: blogId });
+
+    if (!userBlogs) {
+      return res.status(400).json({
+        success: false,
+        message: "no blog found",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      blog: userBlogs || [],
     });
   } catch (error) {
     return res.status(500).json({

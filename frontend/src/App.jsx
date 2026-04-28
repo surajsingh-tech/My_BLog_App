@@ -12,7 +12,11 @@ import Verify from "./pages/Verify";
 import ForgotPassword from "./pages/ForgetPassword";
 import VerifyOTP from "./pages/VerifyOTP";
 import ChangePassword from "./pages/ChangePassword";
-
+import { ToastContainer } from "react-toastify";
+import PageNotFound from "./pages/PageNotFound";
+import Dashboard from "./pages/Dashboard";
+import ReadBlog from "./pages/ReadBlog";
+import ProtectedRoute from "./components/ProtectedRoute";
 export default function App() {
   const router = createBrowserRouter([
     {
@@ -34,6 +38,23 @@ export default function App() {
         {
           path: "contact",
           element: <Contact />,
+        },
+        {
+          path: "dashboard",
+          element: (
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "readblog/:id",
+          element: (
+            <ProtectedRoute>
+              {" "}
+              <ReadBlog />{" "}
+            </ProtectedRoute>
+          ),
         },
       ],
     },
@@ -65,11 +86,16 @@ export default function App() {
       path: "/change-password/:email",
       element: <ChangePassword />,
     },
+    {
+      path: "*",
+      element: <PageNotFound />,
+    },
   ]);
   return (
     <>
       <div className="max-w-7xl mx-auto">
         <RouterProvider router={router} />
+        <ToastContainer position="top-right" autoClose={2000} />
       </div>
     </>
   );

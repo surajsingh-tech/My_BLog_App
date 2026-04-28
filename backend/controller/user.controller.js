@@ -1,7 +1,7 @@
 import cloudinary from "../config/cloudinary.js";
 import getDataUri from "../config/dataUri.js";
 import { sendOTPMail } from "../config/sendOtPMail.js";
-import { sendVerificationEmail } from "../config/verifyMail.js";
+import { verifyEmail } from "../config/verifyEmail.js";
 import Session from "../models/sessionModel.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
@@ -10,6 +10,7 @@ import jwt from "jsonwebtoken";
 export const registerUser = async (req, res) => {
   try {
     const { username, password, email } = req.body;
+    const profileImage = req.file;
     if (!username || !password || !email) {
       return res.status(400).json({
         success: false,
@@ -26,50 +27,41 @@ export const registerUser = async (req, res) => {
 
     let imageUrl = "";
     let imagePublicId = "";
-    if (req.file) {
-      const fileUri = getDataUri(req.file);
+    if (profileImage) {
+      const fileUri = getDataUri(profileImage);
       const cloudResponse = await cloudinary.uploader.upload(fileUri, {
         folder: "users",
       });
-
-      imageUrl = cloudResponse.secure_url;
-      imagePublicId = cloudResponse.public_id;
+      imageUrl = cloudResponse?.secure_url;
+      imagePublicId = cloudResponse?.public_id;
     }
-
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await User.create({
       username,
       password: hashedPassword,
       email,
-      profile: { url: imageUrl || '', publicId: imagePublicId || '' },
+      profile: { url: imageUrl || "", publicId: imagePublicId || "" },
     });
 
     const token = jwt.sign({ id: newUser._id }, process.env.SECRET_KEY, {
       expiresIn: "10m",
     });
 
-    await sendVerificationEmail(token, email);
+    await verifyEmail(token, email);
 
     newUser.token = token;
 
     await newUser.save();
 
-    const userResponse = {
-      id: newUser._id,
-      username: newUser.username,
-      email: newUser.email,
-    };
-
     return res.status(201).json({
       success: true,
       message: "User register successfully",
-      user: userResponse,
     });
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: "Internal server error",
+      message: `Internal server error,${error.message}`,
     });
   }
 };
@@ -127,7 +119,7 @@ export const verifyEmailToken = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: "Internal server error",
+      message: `Internal server error,${error.message}`,
     });
   }
 };
@@ -150,7 +142,6 @@ export const loginUser = async (req, res) => {
         message: "Please Fill all fields",
       });
     }
-
     const user = await User.findOne({ email }).select("+password");
     if (!user) {
       return res.status(401).json({
@@ -198,17 +189,22 @@ export const loginUser = async (req, res) => {
 
     await user.save();
 
+    const userData = {
+      username: user.username,
+      email: user.email,
+      profile: user.profile,
+    };
     return res.status(200).json({
       success: true,
       message: `Welcome back ${user.username}`,
       accessToken,
       refreshToken,
-      user,
+      user: userData,
     });
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: "Internal server error",
+      message: `Internal server error,${error.message}`,
     });
   }
 };
@@ -227,7 +223,7 @@ export const logoutUser = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: "Internal server error",
+      message: `Internal server error,${error.message}`,
     });
   }
 };
@@ -257,7 +253,7 @@ export const forgotPassword = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Internal server error",
+      message: `Internal server error,${error.message}`,
     });
   }
 };
@@ -314,7 +310,7 @@ export const verifyOTP = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Internal server error",
+      message: `Internal server error,${error.message}`,
     });
   }
 };
@@ -356,7 +352,7 @@ export const changePassword = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: "Internal server error",
+      message: `Internal server error,${error.message}`,
     });
   }
 };
