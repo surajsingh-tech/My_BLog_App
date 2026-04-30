@@ -228,20 +228,17 @@ Users can only update or delete their own blogs (authorization applied).
 ## 📸 Screenshots
 
 ### 🏠 Home Page
-
-![Home](./home_page.png)
+![Home](./screenshots/home_page.png)
 
 ### 🔐 Login Page
-
-![Login](./login_page.png)
+![Login](./screenshots/login_page.png)
 
 ### 📊 Dashboard
-
-![Dashboard](./dashboard.png)
+![Dashboard](./screenshots/dashboard.png)
 
 ### 📝 User Blogs
+![User Blogs](./screenshots/dashboard_user_blogs.png)
 
-![User Blogs](./dashboard_user_blogs.png)
 
 ## 🚀 Future Improvements
 
