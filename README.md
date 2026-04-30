@@ -162,9 +162,9 @@ https://my-blog-app-m6dr.onrender.com/api
 
 ## 🔒 Protected Routes (Frontend)
 
-- /dashboard  
-- /profile  
-- /readblog/:id  
+- /dashboard
+- /profile
+- /readblog/:id
 
 ---
 
@@ -172,44 +172,44 @@ https://my-blog-app-m6dr.onrender.com/api
 
 ### 🧑‍💻 User Routes
 
-| Method | Endpoint | Description | Auth |
-|--------|---------|------------|------|
-| POST | /api/user/register | Register user | ❌ |
-| POST | /api/user/login | Login user | ❌ |
-| POST | /api/user/verify | Verify email | ❌ |
-| POST | /api/user/logout | Logout user | ✅ |
-| POST | /api/user/forget-password | Send OTP | ❌ |
-| POST | /api/user/verify-otp/:email | Verify OTP | ❌ |
-| POST | /api/user/change-password/:email | Change password | ❌ |
-| POST | /api/user/profile-update | Update profile | ✅ |
+| Method | Endpoint                         | Description     | Auth |
+| ------ | -------------------------------- | --------------- | ---- |
+| POST   | /api/user/register               | Register user   | ❌   |
+| POST   | /api/user/login                  | Login user      | ❌   |
+| POST   | /api/user/verify                 | Verify email    | ❌   |
+| POST   | /api/user/logout                 | Logout user     | ✅   |
+| POST   | /api/user/forget-password        | Send OTP        | ❌   |
+| POST   | /api/user/verify-otp/:email      | Verify OTP      | ❌   |
+| POST   | /api/user/change-password/:email | Change password | ❌   |
+| POST   | /api/user/profile-update         | Update profile  | ✅   |
 
 ---
 
 ### 📝 Blog Routes
 
-| Method | Endpoint | Description | Auth |
-|--------|---------|------------|------|
-| GET | /api/blog/all | Get all blogs | ❌ |
-| GET | /api/blog/singleBlog/:blogId | Get single blog | ✅ |
-| GET | /api/blog/userblogs | Get user blogs | ✅ |
-| POST | /api/blog/create | Create blog | ✅ |
-| PUT | /api/blog/update/:blogId | Update own blog | ✅ |
-| DELETE | /api/blog/delete/:blogId | Delete own blog | ✅ |
+| Method | Endpoint                     | Description     | Auth |
+| ------ | ---------------------------- | --------------- | ---- |
+| GET    | /api/blog/all                | Get all blogs   | ❌   |
+| GET    | /api/blog/singleBlog/:blogId | Get single blog | ✅   |
+| GET    | /api/blog/userblogs          | Get user blogs  | ✅   |
+| POST   | /api/blog/create             | Create blog     | ✅   |
+| PUT    | /api/blog/update/:blogId     | Update own blog | ✅   |
+| DELETE | /api/blog/delete/:blogId     | Delete own blog | ✅   |
 
 ---
 
 ### 📬 Contact Routes
 
-| Method | Endpoint | Description | Auth |
-|--------|---------|------------|------|
-| POST | /api/contact/send | Send contact message | ✅ |
+| Method | Endpoint          | Description          | Auth |
+| ------ | ----------------- | -------------------- | ---- |
+| POST   | /api/contact/send | Send contact message | ✅   |
 
 ---
 
 ## 🔐 Authentication Note
 
-- ✅ = Requires JWT token (Protected route)  
-- ❌ = Public route  
+- ✅ = Requires JWT token (Protected route)
+- ❌ = Public route
 
 Users can only update or delete their own blogs (authorization applied).
 
@@ -225,22 +225,19 @@ Users can only update or delete their own blogs (authorization applied).
 
 ---
 
-
 ## 📸 Screenshots
 
 ### 🏠 Home Page
-![Home](./home_page.png)
+![Home](./screenshots/home_page.png)
 
 ### 🔐 Login Page
-![Login](./login page.png)
+![Login](./screenshots/login_page.png)
 
 ### 📊 Dashboard
-![Dashboard](./dashboard.png)
+![Dashboard](./screenshots/dashboard.png)
 
 ### 📝 User Blogs
-![User Blogs](./dashboard only user blogs.png)
-
----
+![User Blogs](./screenshots/dashboard_user_blogs.png)
 
 ## 🚀 Future Improvements
 
