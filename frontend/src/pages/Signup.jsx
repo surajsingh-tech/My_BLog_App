@@ -77,8 +77,7 @@ export default function Signup() {
         toast.success("Account created successfully ✅");
       }
     } catch (error) {
-      console.log("error is ", error);
-
+     
       if (error.name === "ValidationError") {
         const validationErrors = {};
 

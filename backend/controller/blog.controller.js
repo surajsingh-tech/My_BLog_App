@@ -9,7 +9,7 @@ export const createBlog = async (req, res) => {
     const { title, category, description } = req.body;
 
     const postImage = req.file;
-    console.log(" image ", postImage);
+    
     if (!title || !category || !description || !postImage) {
       return res.status(500).json({
         success: false,

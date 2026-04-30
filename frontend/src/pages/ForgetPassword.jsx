@@ -62,7 +62,7 @@ export default function ForgotPassword() {
         setEmail("");
       }
     } catch (error) {
-      console.log("ERROR",error);
+     
       toast.error(error.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);
