@@ -68,7 +68,7 @@ export default function Dashboard() {
       formData.append("image", blog.image);
 
       const res = await axios.post(
-        "http://localhost:8000/api/v1/blog/create",
+        `${import.meta.env.VITE_URL}/api/v1/blog/create`,
         formData,
         {
           headers: {
@@ -146,7 +146,7 @@ export default function Dashboard() {
       }
 
       const res = await axios.put(
-        `http://localhost:8000/api/v1/blog/update/${editBlog._id}`,
+        `${import.meta.env.VITE_URL}/api/v1/blog/update/${editBlog._id}`,
         formData,
         {
           headers: {
@@ -182,7 +182,7 @@ export default function Dashboard() {
       setDeleteLoader(true);
       setDeletingId(blog_id);
       const res = await axios.delete(
-        `http://localhost:8000/api/v1/blog/delete/${blog_id}`,
+        `${import.meta.env.VITE_URL}/api/v1/blog/delete/${blog_id}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,

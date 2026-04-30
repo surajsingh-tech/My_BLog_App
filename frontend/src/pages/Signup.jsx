@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, Loader2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -67,7 +67,7 @@ export default function Signup() {
       registerData.append("image", formData?.profile);
 
       const res = await axios.post(
-        "http://localhost:8000/api/v1/user/register",
+        `${import.meta.env.VITE_URL}/api/v1/user/register`,
         registerData,
         { headers: { "Content-Type": "multipart/form-data" } },
       );
@@ -111,7 +111,13 @@ export default function Signup() {
         {/* Card */}
         <form onSubmit={setPostData}>
           <Card className="shadow-xl rounded-2xl border-none">
-            <CardHeader className="space-y-2">
+            <CardHeader className="space-y-2 relative">
+              <button
+                onClick={() => navigate(-1)}
+                className="absolute left-0 top-0 flex items-center gap-1 text-gray-600 hover:text-black"
+              >
+                <ArrowLeft className="w-5 h-5 ml-5" />
+              </button>
               <CardTitle className="text-2xl text-center">
                 Create Account
               </CardTitle>

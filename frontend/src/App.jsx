@@ -17,6 +17,7 @@ import PageNotFound from "./pages/PageNotFound";
 import Dashboard from "./pages/Dashboard";
 import ReadBlog from "./pages/ReadBlog";
 import ProtectedRoute from "./components/ProtectedRoute";
+import UpdateProfile from "./pages/UpdateProfile";
 export default function App() {
   const router = createBrowserRouter([
     {
@@ -38,6 +39,14 @@ export default function App() {
         {
           path: "contact",
           element: <Contact />,
+        },
+        {
+          path: "profile",
+          element: (
+            <ProtectedRoute>
+              <UpdateProfile />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "dashboard",

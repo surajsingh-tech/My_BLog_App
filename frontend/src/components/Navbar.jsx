@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { StoreContext } from "@/context/storeContext";
 import { Button } from "./ui/button";
@@ -8,7 +8,10 @@ export default function Navbar() {
   const navigate = useNavigate();
   const { logout, user } = useContext(StoreContext);
   const [menuOpen, setMenuOpen] = useState(false);
-  console.log("user is ", user);
+
+  // active style function
+  const activeClass = ({ isActive }) =>
+    isActive ? "text-orange-500 " : "text-gray-700 hover:text-orange-500";
 
   return (
     <nav className="bg-white p-4 sticky top-0 shadow-sm z-50">
@@ -24,92 +27,141 @@ export default function Navbar() {
         </div>
 
         {/* desktop menu */}
-        <ul className="hidden sm:flex gap-5 text-xl text-gray-700">
-          <Link to="/" className="hover:text-orange-500 duration-300">
+        <ul className="hidden sm:flex gap-5 text-xl">
+          <NavLink to="/" className={activeClass}>
             Home
-          </Link>
-          <Link to="/blog" className="hover:text-orange-500 duration-300">
+          </NavLink>
+          <NavLink to="/blog" className={activeClass}>
             Blog
-          </Link>
-          <Link to="/about" className="hover:text-orange-500 duration-300">
+          </NavLink>
+          <NavLink to="/about" className={activeClass}>
             About
-          </Link>
-          <Link to="/contact" className="hover:text-orange-500 duration-300">
+          </NavLink>
+          <NavLink to="/contact" className={activeClass}>
             Contact
-          </Link>
+          </NavLink>
+
           {user && (
-            <Link
-              to="/dashboard"
-              className="hover:text-orange-500 duration-300"
-            >
+            <NavLink to="/dashboard" className={activeClass}>
               Dashboard
-            </Link>
+            </NavLink>
           )}
         </ul>
 
-        {user ? (
-          <Button
-            onClick={logout}
-            className="hidden sm:block bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 duration-300 items-center "
-          >
-            Logout
-          </Button>
-        ) : (
-          <Link
-            to={"/login"}
-            className="hidden sm:block bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 duration-300"
-          >
-            Login
-          </Link>
-        )}
+        {/* right side */}
+        <div className="flex items-center gap-3">
+          {/* 👤 USER AVATAR */}
+          {user && (
+            <img
+              src={user?.profile?.url || ""}
+              alt="user"
+              onClick={() => navigate("/profile")}
+              className="h-10 w-10 rounded-full object-cover border-2 border-orange-500 cursor-pointer hover:scale-105 transition"
+            />
+          )}
 
-        {/* mobile button */}
-        <button
-          className="sm:hidden text-3xl"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          ☰
-        </button>
+          {/* DESKTOP AUTH BUTTONS */}
+          <div className="hidden md:flex items-center gap-2">
+            {user ? (
+              <Button
+                onClick={logout}
+                className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-full transition"
+              >
+                Logout
+              </Button>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="px-4 py-2 rounded-full border border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white transition"
+                >
+                  Login
+                </Link>
+
+                <Link
+                  to="/signup"
+                  className="px-4 py-2 rounded-full bg-orange-500 text-white hover:bg-orange-600 transition"
+                >
+                  Signup
+                </Link>
+              </>
+            )}
+          </div>
+
+          {/* mobile button */}
+          <button
+            className="sm:hidden text-3xl"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            ☰
+          </button>
+        </div>
       </div>
 
       {/* mobile menu */}
       {menuOpen && (
         <div className="sm:hidden mt-4 flex flex-col gap-4 text-lg text-gray-700">
-          <Link onClick={() => setMenuOpen(false)} to="/">
+          <NavLink
+            onClick={() => setMenuOpen(false)}
+            to="/"
+            className={activeClass}
+          >
             Home
-          </Link>
-          <Link onClick={() => setMenuOpen(false)} to="/blog">
+          </NavLink>
+          <NavLink
+            onClick={() => setMenuOpen(false)}
+            to="/blog"
+            className={activeClass}
+          >
             Blog
-          </Link>
-          <Link onClick={() => setMenuOpen(false)} to="/about">
+          </NavLink>
+          <NavLink
+            onClick={() => setMenuOpen(false)}
+            to="/about"
+            className={activeClass}
+          >
             About
-          </Link>
-          <Link onClick={() => setMenuOpen(false)} to="/contact">
+          </NavLink>
+          <NavLink
+            onClick={() => setMenuOpen(false)}
+            to="/contact"
+            className={activeClass}
+          >
             Contact
-          </Link>
+          </NavLink>
+
           {user && (
-            <Link
+            <NavLink
+              onClick={() => setMenuOpen(false)}
               to="/dashboard"
-              className="hover:text-orange-500 duration-300"
+              className={activeClass}
             >
               Dashboard
-            </Link>
+            </NavLink>
           )}
 
           {user ? (
             <Button
               onClick={logout}
-              className="hidden sm:block bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 duration-300 items-center "
+              className="bg-orange-500 text-white px-2 py-2 rounded-full"
             >
               Logout
             </Button>
           ) : (
-            <Link
-              to={"/login"}
-              className="hidden sm:block bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 duration-300"
-            >
-              Login
-            </Link>
+            <>
+              <Link
+                to={"/login"}
+                className="bg-orange-500 w-[40%] text-white px-2 py-2 text-center rounded-full"
+              >
+                Login
+              </Link>
+              <Link
+                to={"/signup"}
+                className="bg-orange-500 w-[40%] text-white px-2 py-2 text-center rounded-full"
+              >
+                Signup
+              </Link>
+            </>
           )}
         </div>
       )}

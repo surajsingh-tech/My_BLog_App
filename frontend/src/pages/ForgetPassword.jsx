@@ -52,16 +52,17 @@ export default function ForgotPassword() {
     try {
       setLoading(true);
       const res = await axios.post(
-        "http://localhost:8000/api/v1/user/forget-password",
+        `${import.meta.env.VITE_URL}/api/v1/user/forget-password`,
         { email },
       );
       if (res.data.success) {
         toast.success(res.data?.message);
+         setSubmited(true);
         navigate(`/verify-otp/${email}`);
-        toast.success(res.data.message);
         setEmail("");
       }
     } catch (error) {
+      console.log("ERROR",error);
       toast.error(error.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);

@@ -49,7 +49,7 @@ export default function VerifyOTP() {
       setIsLoading(true);
 
       const res = await axios.post(
-        `http://localhost:8000/api/v1/user/verify-otp/${email}`,
+        `${import.meta.env.VITE_URL}/api/v1/user/verify-otp/${email}`,
         { otp: finalOtp },
       );
 

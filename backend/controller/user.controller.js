@@ -231,6 +231,14 @@ export const logoutUser = async (req, res) => {
 export const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: "Email is required",
+      });
+    }
+
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -239,13 +247,17 @@ export const forgotPassword = async (req, res) => {
         message: "User not found",
       });
     }
+    console.log("000");
     const OTP = Math.floor(100000 + Math.random() * 900000).toString();
     const expiry = new Date(Date.now() + 10 * 60 * 1000);
 
-    ((user.otp = OTP), (user.otpExpiry = expiry), await user.save());
+    user.otp = OTP;
+    user.otpExpiry = expiry;
+    await user.save();
+    console.log("111");
 
-    await sendOTPMail(email, OTP);
-
+    await sendOTPMail(OTP, email);
+    console.log("222");
     return res.status(200).json({
       success: true,
       message: "OTP Send Successfully",
@@ -348,6 +360,63 @@ export const changePassword = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Password successfully changed",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: `Internal server error,${error.message}`,
+    });
+  }
+};
+
+export const updateProfile = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const { username } = req.body;
+    const profileImage = req.file;
+    if (!username && !profileImage) {
+      return res.status(400).json({
+        success: false,
+        message: "Please update at least one field",
+      });
+    }
+    
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: `user not found`,
+      });
+    }
+
+    let profileUrl = user.profile.url;
+    let profile_publicId = user.profile.publicId;
+
+    if (profileImage) {
+      if (user?.profile?.publicId) {
+        //reomove previous profile
+        await cloudinary.uploader.destroy(user.profile.publicId);
+      }
+
+      const fileURI = getDataUri(profileImage);
+      const cloudResponse = await cloudinary.uploader.upload(fileURI, {
+        folder: "users",
+      });
+      profileUrl = cloudResponse?.secure_url;
+      profile_publicId = cloudResponse?.public_id;
+    }
+
+    if (username) {
+      user.username = username;
+    }
+
+    user.profile = { url: profileUrl, publicId: profile_publicId };
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Profile update successfully",
+      user,
     });
   } catch (error) {
     return res.status(500).json({

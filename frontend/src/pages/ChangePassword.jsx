@@ -72,7 +72,7 @@ export default function ChangePassword() {
     try {
       setIsLoading(true);
       const res = await axios.post(
-        `http://localhost:8000/api/v1/user/change-password/${email}`,
+        `${import.meta.env.VITE_URL}/api/v1/user/change-password/${email}`,
         {
           newPassword: userPass.newPassword,
           confirmPassword: userPass.confirmPassword,

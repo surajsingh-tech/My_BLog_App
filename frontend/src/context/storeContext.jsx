@@ -1,5 +1,4 @@
 import { createContext, useState, useEffect } from "react";
-import { blogData } from "@/assets/blogData";
 import { toast } from "react-toastify";
 import axios from "axios";
 
@@ -24,7 +23,7 @@ const StoreContextProvider = ({ children }) => {
   const userBlog = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/api/v1/blog/userblogs`,
+        `${import.meta.env.VITE_URL}/api/v1/blog/userblogs`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -43,14 +42,46 @@ const StoreContextProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("accessToken");
+  const updateUserProfile = (updatedFields) => {
+    setUser((pre) => {
+      const updatedData = { ...pre, ...updatedFields };
+      localStorage.setItem("user", JSON.stringify(updatedData));
+      return updatedData;
+    });
+  };
+
+  const logout = async () => {
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_URL}/api/v1/user/logout`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      );
+      if (res.data.success) {
+        toast.success(res?.data?.message);
+        setUser(null);
+        localStorage.removeItem("accessToken");
+      }
+    } catch (error) {
+      console.log(error);
+
+      if (error.response) {
+        toast.error(error.response?.data?.message);
+      } else {
+        toast.error(error.message);
+      }
+    }
   };
 
   const getBlogData = async () => {
     try {
-      const res = await axios.get(`http://localhost:8000/api/v1/blog/all`);
+      const res = await axios.get(
+        `${import.meta.env.VITE_URL}/api/v1/blog/all`,
+      );
       if (res.data.success) {
         setBlogData(res.data?.allBlogs);
       }
@@ -75,10 +106,10 @@ const StoreContextProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-  if (accessToken) {
-    userBlog();
-  }
-}, [accessToken]);
+    if (accessToken) {
+      userBlog();
+    }
+  }, [accessToken]);
 
   const contextValue = {
     blogData,
@@ -88,6 +119,7 @@ const StoreContextProvider = ({ children }) => {
     getBlogData,
     setBlogData,
     userBlogs,
+    updateUserProfile,
   };
 
   return (
