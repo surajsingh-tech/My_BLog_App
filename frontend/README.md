@@ -225,9 +225,20 @@ Users can only update or delete their own blogs (authorization applied).
 
 ---
 
-## 📸 Screenshots (Recommended)
 
-👉 Add UI screenshots (Home, Dashboard, Blog, Login) to enhance presentation
+## 📸 Screenshots
+
+### 🏠 Home Page
+![Home](./home_page.png)
+
+### 🔐 Login Page
+![Login](./login page.png)
+
+### 📊 Dashboard
+![Dashboard](./dashboard.png)
+
+### 📝 User Blogs
+![User Blogs](./dashboard only user blogs.png)
 
 ---
 
